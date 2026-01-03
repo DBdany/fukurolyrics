@@ -1,10 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Container } from '@/components/layout'
 import { AnimatedHero } from './components/ui/AnimatedHero'
 import type { ReleaseWithTracks } from '@/types'
+
+type ReleaseFilter = 'ALL' | 'ALBUM' | 'EP' | 'SINGLE'
 
 function formatDate(date: Date): string {
   return new Intl.DateTimeFormat('en-US', {
@@ -27,12 +30,35 @@ function getReleaseTypeLabel(type: string): string {
   }
 }
 
-interface HomePageClientProps {
-  releases: ReleaseWithTracks[]
+function isRecentRelease(date: Date): boolean {
+  const thirtyDaysAgo = new Date()
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+  return new Date(date) > thirtyDaysAgo
 }
 
-export function HomePageClient({ releases }: HomePageClientProps) {
+interface HomePageClientProps {
+  releases: ReleaseWithTracks[]
+  allSongSlugs?: string[]
+}
+
+export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientProps) {
+  const router = useRouter()
   const [animationComplete, setAnimationComplete] = useState(false)
+  const [typeFilter, setTypeFilter] = useState<ReleaseFilter>('ALL')
+
+  const filteredReleases = useMemo(() => {
+    if (typeFilter === 'ALL') return releases
+    return releases.filter(r => r.type === typeFilter)
+  }, [releases, typeFilter])
+
+  const featuredRelease = releases[0] // Most recent
+  const otherReleases = filteredReleases.filter(r => r.id !== featuredRelease?.id)
+
+  const handleRandomSong = () => {
+    if (allSongSlugs.length === 0) return
+    const randomSlug = allSongSlugs[Math.floor(Math.random() * allSongSlugs.length)]
+    router.push(`/lyrics/${randomSlug}`)
+  }
 
   return (
     <>
@@ -83,19 +109,91 @@ export function HomePageClient({ releases }: HomePageClientProps) {
             </div>
           </section>
 
+          {/* Random Song Button */}
+          {allSongSlugs.length > 0 && (
+            <section className="mb-8 text-center">
+              <button
+                onClick={handleRandomSong}
+                className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600 transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+              >
+                <span>🎲</span>
+                Discover a random song
+              </button>
+            </section>
+          )}
+
+          {/* Featured Release */}
+          {featuredRelease && (
+            <section className="mb-8">
+              <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-neutral-400">
+                Latest Release
+              </h2>
+              <Link
+                href={`/releases/${featuredRelease.slug}`}
+                className="block rounded-xl border-2 border-neutral-900 bg-neutral-900 p-6 text-white transition-all hover:bg-neutral-800"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    {isRecentRelease(featuredRelease.releaseDate) && (
+                      <span className="mb-2 inline-block rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
+                        New
+                      </span>
+                    )}
+                    <h3 className="text-xl font-bold">
+                      <span lang="ja">{featuredRelease.titleJp}</span>
+                      <span className="ml-2 text-neutral-400">
+                        {featuredRelease.titleRomaji}
+                      </span>
+                    </h3>
+                    <p className="mt-2 text-neutral-400">
+                      {featuredRelease.tracks.length} tracks
+                    </p>
+                  </div>
+                  <div className="text-right text-sm text-neutral-400">
+                    <p>{getReleaseTypeLabel(featuredRelease.type)}</p>
+                    <p>{formatDate(featuredRelease.releaseDate)}</p>
+                  </div>
+                </div>
+              </Link>
+            </section>
+          )}
+
           {/* Discography */}
           <section>
-            <h2 className="mb-6 text-sm font-medium uppercase tracking-wider text-neutral-400">
-              Discography
-            </h2>
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+              <h2 className="text-sm font-medium uppercase tracking-wider text-neutral-400">
+                All Releases
+              </h2>
 
-            {releases.length === 0 ? (
+              {/* Type Filter Tabs */}
+              <div className="flex gap-2">
+                {(['ALL', 'ALBUM', 'EP', 'SINGLE'] as ReleaseFilter[]).map((type) => (
+                  <button
+                    key={type}
+                    onClick={() => setTypeFilter(type)}
+                    className={`rounded-full px-3 py-1 text-sm transition-colors ${
+                      typeFilter === type
+                        ? 'bg-black text-white'
+                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                    }`}
+                  >
+                    {type === 'ALL' ? 'All' : getReleaseTypeLabel(type)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {otherReleases.length === 0 ? (
               <div className="rounded-lg border border-dashed border-neutral-300 p-8 text-center">
-                <p className="text-neutral-500">No releases yet. Add some lyrics to get started!</p>
+                <p className="text-neutral-500">
+                  {typeFilter === 'ALL'
+                    ? 'No other releases yet.'
+                    : `No ${getReleaseTypeLabel(typeFilter).toLowerCase()}s found.`}
+                </p>
               </div>
             ) : (
               <div className="space-y-4">
-                {releases.map((release) => (
+                {otherReleases.map((release) => (
                   <Link
                     key={release.id}
                     href={`/releases/${release.slug}`}
@@ -103,6 +201,11 @@ export function HomePageClient({ releases }: HomePageClientProps) {
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
+                        {isRecentRelease(release.releaseDate) && (
+                          <span className="mb-1 inline-block rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
+                            New
+                          </span>
+                        )}
                         <h3 className="font-medium">
                           <span lang="ja">{release.titleJp}</span>
                           <span className="ml-2 text-neutral-500">
