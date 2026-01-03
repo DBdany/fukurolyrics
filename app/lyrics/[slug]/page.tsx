@@ -1,17 +1,12 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { getSongBySlug, getAllSongSlugs } from '@/lib/queries'
+import { getSongBySlug, getTrackContext } from '@/lib/queries'
 import { LyricsPageClient } from './LyricsClient'
+
+export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  const songs = await getAllSongSlugs()
-  return songs.map((song) => ({
-    slug: song.slug,
-  }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -36,5 +31,11 @@ export default async function LyricsPage({ params }: PageProps) {
     notFound()
   }
 
-  return <LyricsPageClient song={song} />
+  // Get track context for navigation (use first release)
+  const firstRelease = song.releases[0]
+  const trackContext = firstRelease
+    ? await getTrackContext(slug, firstRelease.release.slug)
+    : null
+
+  return <LyricsPageClient song={song} trackContext={trackContext} />
 }
