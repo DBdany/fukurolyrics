@@ -106,6 +106,17 @@ async function main() {
         type: 'EP',
       },
     }),
+    // Chou Ka Ga Single
+    prisma.release.create({
+      data: {
+        slug: 'chou-ka-ga-single',
+        titleJp: '蝶か蛾',
+        titleRomaji: 'Chou Ka Ga',
+        titleEn: 'Butterfly or Moth',
+        releaseDate: new Date('2025-01-01'),
+        type: 'SINGLE',
+      },
+    }),
   ])
 
   const [
@@ -117,6 +128,7 @@ async function main() {
     firstAlbum,
     roadToFutureSingle,
     fourthMini,
+    chouKaGaSingle,
   ] = releases
 
   console.log(`Created ${releases.length} releases`)
@@ -672,6 +684,24 @@ async function main() {
     }),
   ])
 
+  // ============================================
+  // SONGS - Chou Ka Ga Single (蝶か蛾)
+  // ============================================
+
+  const chouKaGaSongs = await Promise.all([
+    prisma.song.create({
+      data: {
+        slug: 'chou-ka-ga',
+        titleJp: '蝶か蛾',
+        titleRomaji: 'Chou Ka Ga',
+        titleEn: 'Butterfly or Moth',
+        lyricsJp: PLACEHOLDER.jp,
+        lyricsRomaji: PLACEHOLDER.romaji,
+        lyricsEn: PLACEHOLDER.en,
+      },
+    }),
+  ])
+
   console.log('Created all songs')
 
   // ============================================
@@ -702,6 +732,7 @@ async function main() {
   await createTracks(firstAlbum.id, firstAlbumSongs)
   await createTracks(roadToFutureSingle.id, roadToFutureSongs)
   await createTracks(fourthMini.id, fourthMiniSongs)
+  await createTracks(chouKaGaSingle.id, chouKaGaSongs)
 
   console.log('Created all track relationships')
 
