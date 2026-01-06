@@ -1,0 +1,23 @@
+# deps
+node_modules
+.pnpm-store
+
+# next.js
+.next
+out
+
+# misc
+.git
+.gitignore
+*.md
+.env*
+.DS_Store
+
+# docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# ide
+.vscode
+.idea
