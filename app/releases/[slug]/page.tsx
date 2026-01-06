@@ -2,18 +2,13 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { Container } from '@/components/layout'
-import { getReleaseBySlug, getAllReleaseSlugs } from '@/lib/queries'
+import { getReleaseBySlug } from '@/lib/queries'
 import type { ReleaseWithTracks } from '@/types'
+
+export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: Promise<{ slug: string }>
-}
-
-export async function generateStaticParams() {
-  const releases = await getAllReleaseSlugs()
-  return releases.map((release) => ({
-    slug: release.slug,
-  }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
