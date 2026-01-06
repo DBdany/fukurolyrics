@@ -1,9 +1,16 @@
 'use client'
 
-import { useState, use } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Container } from '@/components/layout'
 import type { LyricsViewMode } from '@/types'
+
+interface TrackContext {
+  currentTrack: number
+  totalTracks: number
+  prevSong: { slug: string; titleRomaji: string } | null
+  nextSong: { slug: string; titleRomaji: string } | null
+}
 
 interface LyricsPageClientProps {
   song: {
@@ -23,6 +30,7 @@ interface LyricsPageClientProps {
       trackNumber: number
     }[]
   }
+  trackContext?: TrackContext | null
 }
 
 const viewModeLabels: Record<LyricsViewMode, string> = {
@@ -142,8 +150,24 @@ function LyricsContent({
   )
 }
 
-export function LyricsPageClient({ song }: LyricsPageClientProps) {
+const VIEW_MODE_KEY = 'fukuro-lyrics-view-mode'
+
+export function LyricsPageClient({ song, trackContext }: LyricsPageClientProps) {
   const [viewMode, setViewMode] = useState<LyricsViewMode>('stacked')
+
+  // Load saved view mode from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem(VIEW_MODE_KEY)
+    if (saved && ['stacked', 'side-by-side', 'japanese', 'romaji', 'english'].includes(saved)) {
+      setViewMode(saved as LyricsViewMode)
+    }
+  }, [])
+
+  // Save view mode to localStorage when changed
+  const handleViewModeChange = (mode: LyricsViewMode) => {
+    setViewMode(mode)
+    localStorage.setItem(VIEW_MODE_KEY, mode)
+  }
 
   const firstRelease = song.releases[0]
 
@@ -190,7 +214,7 @@ export function LyricsPageClient({ song }: LyricsPageClientProps) {
         ).map((mode) => (
           <button
             key={mode}
-            onClick={() => setViewMode(mode)}
+            onClick={() => handleViewModeChange(mode)}
             className={`rounded-full px-3 py-1 text-sm transition-colors ${
               viewMode === mode
                 ? 'bg-black text-white'
@@ -220,6 +244,41 @@ export function LyricsPageClient({ song }: LyricsPageClientProps) {
           </h2>
           <p className="text-sm text-neutral-600">{song.notes}</p>
         </section>
+      )}
+
+      {/* Track Navigation */}
+      {trackContext && (
+        <nav className="mt-8 border-t border-neutral-200 pt-6">
+          <div className="mb-4 text-center text-sm text-neutral-500">
+            Track {trackContext.currentTrack} of {trackContext.totalTracks}
+          </div>
+          <div className="flex items-center justify-between gap-4">
+            {trackContext.prevSong ? (
+              <Link
+                href={`/lyrics/${trackContext.prevSong.slug}`}
+                className="flex items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 text-sm transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+              >
+                <span>←</span>
+                <span className="hidden sm:inline">{trackContext.prevSong.titleRomaji}</span>
+                <span className="sm:hidden">Previous</span>
+              </Link>
+            ) : (
+              <div />
+            )}
+            {trackContext.nextSong ? (
+              <Link
+                href={`/lyrics/${trackContext.nextSong.slug}`}
+                className="flex items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 text-sm transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+              >
+                <span className="hidden sm:inline">{trackContext.nextSong.titleRomaji}</span>
+                <span className="sm:hidden">Next</span>
+                <span>→</span>
+              </Link>
+            ) : (
+              <div />
+            )}
+          </div>
+        </nav>
       )}
     </Container>
   )

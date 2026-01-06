@@ -1,7 +1,13 @@
 import Link from 'next/link'
 import { Container } from './Container'
+import { SearchBar } from './SearchBar'
+import type { SongSearchResult } from '@/types'
 
-export function Header() {
+interface HeaderProps {
+  songs?: SongSearchResult[]
+}
+
+export function Header({ songs = [] }: HeaderProps) {
   return (
     <header className="border-b border-neutral-200 py-6">
       <Container>
@@ -10,24 +16,35 @@ export function Header() {
             <span className="mr-2">梟</span>
             <span className="text-neutral-500">FUKURO LYRICS</span>
           </Link>
-          <ul className="flex items-center gap-6 text-sm">
-            <li>
-              <Link
-                href="/"
-                className="text-neutral-600 transition-colors hover:text-black"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/about"
-                className="text-neutral-600 transition-colors hover:text-black"
-              >
-                About
-              </Link>
-            </li>
-          </ul>
+          <div className="flex items-center gap-6">
+            <SearchBar songs={songs} />
+            <ul className="flex items-center gap-6 text-sm">
+              <li>
+                <Link
+                  href="/"
+                  className="text-neutral-600 transition-colors hover:text-black"
+                >
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/library"
+                  className="text-neutral-600 transition-colors hover:text-black"
+                >
+                  Library
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about"
+                  className="text-neutral-600 transition-colors hover:text-black"
+                >
+                  About
+                </Link>
+              </li>
+            </ul>
+          </div>
         </nav>
       </Container>
     </header>

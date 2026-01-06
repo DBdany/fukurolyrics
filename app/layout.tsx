@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Header, Footer } from '@/components/layout'
+import { FaroProvider } from '@/components/analytics'
+import { getAllSongsForSearch } from '@/lib/queries'
 import './globals.css'
 
 const geistSans = Geist({
@@ -22,18 +24,27 @@ export const metadata: Metadata = {
     'Lyrics for the Japanese visual kei band 梟 (Fukuro) in Japanese, Romaji, and English translations.',
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // Handle build-time when DATABASE_URL isn't available
+  let songs: Awaited<ReturnType<typeof getAllSongsForSearch>> = []
+  try {
+    songs = await getAllSongsForSearch()
+  } catch {
+    // Database not available during build, search will work at runtime
+  }
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
       >
+        <FaroProvider />
         <div className="flex min-h-screen flex-col">
-          <Header />
+          <Header songs={songs} />
           <main className="flex-1 py-8">{children}</main>
           <Footer />
         </div>
