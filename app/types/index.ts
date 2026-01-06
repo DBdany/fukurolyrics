@@ -18,3 +18,21 @@ export type SongWithReleases = Song & {
 
 // Lyrics view mode
 export type LyricsViewMode = 'japanese' | 'romaji' | 'english' | 'side-by-side' | 'stacked'
+
+// Search result type
+export type SongSearchResult = {
+  slug: string
+  titleJp: string
+  titleRomaji: string
+  titleEn: string | null
+}
+
+// Library item type
+export type SongLibraryItem = {
+  slug: string
+  titleJp: string
+  titleRomaji: string
+  titleEn: string | null
+  hasLyrics: boolean
+  releases: { slug: string; titleRomaji: string }[]
+}
