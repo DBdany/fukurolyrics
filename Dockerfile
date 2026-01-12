@@ -24,6 +24,9 @@ COPY . .
 # generate prisma client
 RUN pnpm prisma generate
 
+# build seed scripts for production
+RUN pnpm seeds:build
+
 # build next.js
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm build
@@ -44,6 +47,9 @@ COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.pnpm/@prisma+client*/node_modules/.prisma ./node_modules/.prisma
+
+# copy compiled seed scripts
+COPY --from=builder /app/prisma/seeds/*.js ./prisma/seeds/
 
 # install prisma cli for migrations
 RUN npm install -g prisma@6

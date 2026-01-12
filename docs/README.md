@@ -7,6 +7,7 @@ this is a fan-made lyrics site for the japanese visual kei band 梟 (fukuro). we
 ## quick links
 
 - [adding lyrics](./adding-lyrics.md) - how to add songs to the database
+- [images & cdn](./images.md) - adding album artwork
 - [development](./development.md) - running the site locally
 - [contributing](./contributing.md) - how to help out
 

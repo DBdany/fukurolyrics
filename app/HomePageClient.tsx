@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Container } from '@/components/layout'
+import { AlbumCover } from './components/ui/AlbumCover'
 import { AnimatedHero } from './components/ui/AnimatedHero'
 import type { ReleaseWithTracks } from '@/types'
 
@@ -132,26 +133,34 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
                 href={`/releases/${featuredRelease.slug}`}
                 className="block rounded-xl border-2 border-neutral-900 bg-neutral-900 p-6 text-white transition-all hover:bg-neutral-800"
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    {isRecentRelease(featuredRelease.releaseDate) && (
-                      <span className="mb-2 inline-block rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
-                        New
-                      </span>
-                    )}
-                    <h3 className="text-xl font-bold">
-                      <span lang="ja">{featuredRelease.titleJp}</span>
-                      <span className="ml-2 text-neutral-400">
-                        {featuredRelease.titleRomaji}
-                      </span>
-                    </h3>
-                    <p className="mt-2 text-neutral-400">
-                      {featuredRelease.tracks.length} tracks
-                    </p>
-                  </div>
-                  <div className="text-right text-sm text-neutral-400">
-                    <p>{getReleaseTypeLabel(featuredRelease.type)}</p>
-                    <p>{formatDate(featuredRelease.releaseDate)}</p>
+                <div className="flex gap-5">
+                  <AlbumCover
+                    src={featuredRelease.coverArt}
+                    alt={`${featuredRelease.titleRomaji} cover`}
+                    size="md"
+                    priority
+                  />
+                  <div className="flex flex-1 items-start justify-between gap-4">
+                    <div>
+                      {isRecentRelease(featuredRelease.releaseDate) && (
+                        <span className="mb-2 inline-block rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
+                          New
+                        </span>
+                      )}
+                      <h3 className="text-xl font-bold">
+                        <span lang="ja">{featuredRelease.titleJp}</span>
+                        <span className="ml-2 text-neutral-400">
+                          {featuredRelease.titleRomaji}
+                        </span>
+                      </h3>
+                      <p className="mt-2 text-neutral-400">
+                        {featuredRelease.tracks.length} tracks
+                      </p>
+                    </div>
+                    <div className="text-right text-sm text-neutral-400">
+                      <p>{getReleaseTypeLabel(featuredRelease.type)}</p>
+                      <p>{formatDate(featuredRelease.releaseDate)}</p>
+                    </div>
                   </div>
                 </div>
               </Link>
@@ -199,26 +208,33 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
                     href={`/releases/${release.slug}`}
                     className="block rounded-lg border border-neutral-200 p-4 transition-colors hover:border-neutral-300 hover:bg-neutral-50"
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        {isRecentRelease(release.releaseDate) && (
-                          <span className="mb-1 inline-block rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
-                            New
-                          </span>
-                        )}
-                        <h3 className="font-medium">
-                          <span lang="ja">{release.titleJp}</span>
-                          <span className="ml-2 text-neutral-500">
-                            {release.titleRomaji}
-                          </span>
-                        </h3>
-                        <p className="mt-1 text-sm text-neutral-500">
-                          {release.tracks.length} tracks
-                        </p>
-                      </div>
-                      <div className="text-right text-sm text-neutral-500">
-                        <p>{getReleaseTypeLabel(release.type)}</p>
-                        <p>{formatDate(release.releaseDate)}</p>
+                    <div className="flex gap-4">
+                      <AlbumCover
+                        src={release.coverArt}
+                        alt={`${release.titleRomaji} cover`}
+                        size="sm"
+                      />
+                      <div className="flex flex-1 items-start justify-between gap-4">
+                        <div>
+                          {isRecentRelease(release.releaseDate) && (
+                            <span className="mb-1 inline-block rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
+                              New
+                            </span>
+                          )}
+                          <h3 className="font-medium">
+                            <span lang="ja">{release.titleJp}</span>
+                            <span className="ml-2 text-neutral-500">
+                              {release.titleRomaji}
+                            </span>
+                          </h3>
+                          <p className="mt-1 text-sm text-neutral-500">
+                            {release.tracks.length} tracks
+                          </p>
+                        </div>
+                        <div className="text-right text-sm text-neutral-500">
+                          <p>{getReleaseTypeLabel(release.type)}</p>
+                          <p>{formatDate(release.releaseDate)}</p>
+                        </div>
                       </div>
                     </div>
                   </Link>
