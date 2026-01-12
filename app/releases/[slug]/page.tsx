@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { Container } from '@/components/layout'
+import { AlbumCover } from '@/components/ui/AlbumCover'
 import { getReleaseBySlug } from '@/lib/queries'
 import type { ReleaseWithTracks } from '@/types'
 
@@ -66,16 +67,26 @@ export default async function ReleasePage({ params }: PageProps) {
 
       {/* Release Header */}
       <header className="mb-8 border-b border-neutral-200 pb-8">
-        <p className="mb-2 text-sm text-neutral-500">
-          {getReleaseTypeLabel(release.type)} · {formatDate(release.releaseDate)}
-        </p>
-        <h1 className="text-3xl font-bold tracking-tight">
-          <span lang="ja">{release.titleJp}</span>
-        </h1>
-        <p className="mt-1 text-xl text-neutral-500">{release.titleRomaji}</p>
-        {release.titleEn && (
-          <p className="mt-1 text-neutral-400">{release.titleEn}</p>
-        )}
+        <div className="flex gap-6">
+          <AlbumCover
+            src={release.coverArt}
+            alt={`${release.titleRomaji} cover art`}
+            size="lg"
+            priority
+          />
+          <div>
+            <p className="mb-2 text-sm text-neutral-500">
+              {getReleaseTypeLabel(release.type)} · {formatDate(release.releaseDate)}
+            </p>
+            <h1 className="text-3xl font-bold tracking-tight">
+              <span lang="ja">{release.titleJp}</span>
+            </h1>
+            <p className="mt-1 text-xl text-neutral-500">{release.titleRomaji}</p>
+            {release.titleEn && (
+              <p className="mt-1 text-neutral-400">{release.titleEn}</p>
+            )}
+          </div>
+        </div>
       </header>
 
       {/* Tracklist */}

@@ -9,7 +9,7 @@ primary_region = 'sjc'
 [build]
 
 [deploy]
-  release_command = "prisma migrate deploy"
+  release_command = "prisma migrate deploy && node /app/prisma/seeds/run-seeds.js"
 
 [http_service]
   internal_port = 3000
