@@ -47,7 +47,7 @@ export function AnimatedHero({ onAnimationComplete }: AnimatedHeroProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-primary)]">
       <div
         className={`
           flex items-center justify-center text-4xl font-bold tracking-tight
@@ -70,7 +70,7 @@ export function AnimatedHero({ onAnimationComplete }: AnimatedHeroProps) {
         {/* FUKURO text - hidden initially, slides in from left */}
         <span
           className={`
-            text-neutral-400 transition-all duration-600 ease-out
+            text-[var(--text-muted)] transition-all duration-600 ease-out
             ${stage === 'initial' || stage === 'kanji'
               ? 'opacity-0 w-0 -translate-x-2'
               : 'opacity-100 w-auto translate-x-0'

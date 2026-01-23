@@ -76,7 +76,7 @@ export function SearchBar({ songs }: SearchBarProps) {
     <div ref={containerRef} className="relative">
       <div className="relative">
         <svg
-          className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400"
+          className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -99,14 +99,15 @@ export function SearchBar({ songs }: SearchBarProps) {
           }}
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
-          className="w-36 rounded-md border border-neutral-200 bg-white py-1.5 pl-9 pr-3 text-sm
-                     placeholder:text-neutral-400 focus:w-48 focus:border-neutral-400 focus:outline-none
+          className="w-36 rounded-md border border-[var(--border-primary)] bg-[var(--bg-secondary)] py-1.5 pl-9 pr-3 text-sm
+                     text-[var(--text-primary)] placeholder:text-[var(--text-muted)]
+                     focus:w-48 focus:border-[var(--border-secondary)] focus:outline-none
                      transition-all duration-200"
         />
       </div>
 
       {isOpen && query.length > 0 && (
-        <div className="absolute right-0 top-full z-50 mt-1 w-72 overflow-hidden rounded-md border border-neutral-200 bg-white shadow-lg">
+        <div className="absolute right-0 top-full z-50 mt-1 w-72 overflow-hidden rounded-md border border-[var(--border-primary)] bg-[var(--bg-secondary)] shadow-lg">
           {filteredSongs.length > 0 ? (
             <ul className="max-h-64 overflow-y-auto py-1">
               {filteredSongs.map((song, index) => (
@@ -115,17 +116,17 @@ export function SearchBar({ songs }: SearchBarProps) {
                     onClick={() => navigateToSong(song.slug)}
                     className={`
                       w-full px-3 py-2 text-left text-sm transition-colors
-                      ${index === selectedIndex ? 'bg-neutral-100' : 'hover:bg-neutral-50'}
+                      ${index === selectedIndex ? 'bg-[var(--bg-tertiary)]' : 'hover:bg-[var(--bg-tertiary)]'}
                     `}
                   >
-                    <span className="font-medium">{song.titleRomaji}</span>
-                    <span className="ml-2 text-neutral-400" lang="ja">{song.titleJp}</span>
+                    <span className="font-medium text-[var(--text-primary)]">{song.titleRomaji}</span>
+                    <span className="ml-2 text-[var(--text-muted)]" lang="ja">{song.titleJp}</span>
                   </button>
                 </li>
               ))}
             </ul>
           ) : (
-            <div className="px-3 py-4 text-center text-sm text-neutral-500">
+            <div className="px-3 py-4 text-center text-sm text-[var(--text-muted)]">
               No songs found
             </div>
           )}

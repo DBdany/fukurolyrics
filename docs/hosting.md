@@ -47,12 +47,12 @@ max realistic cost for constant 24/7 traffic: ~$5-6/month
 
 reduce app VM memory:
 ```bash
-fly scale memory 512 --app fukurolyrics-bold-shadow-503
+fly scale memory 512 --app 
 ```
 
 scale back up:
 ```bash
-fly scale memory 1024 --app fukurolyrics-bold-shadow-503
+fly scale memory 1024 --app 
 ```
 
 ## cold starts
@@ -63,16 +63,15 @@ when VMs are stopped, first visitor waits 2-3 sec for boot. tradeoff for auto-st
 
 ```bash
 # status
-fly status --app fukurolyrics-bold-shadow-503
-
+fly status --app 
 # VM specs
-fly scale show --app fukurolyrics-bold-shadow-503
+fly scale show --app 
 
 # logs
-fly logs --app fukurolyrics-bold-shadow-503
+fly logs --app 
 
 # ssh in
-fly ssh console --app fukurolyrics-bold-shadow-503
+fly ssh console --app
 
 # postgres
 fly postgres list

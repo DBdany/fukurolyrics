@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Header, Footer } from '@/components/layout'
+import { Header, Footer, AppShell } from '@/components/layout'
 import { FaroProvider } from '@/components/analytics'
-import { getAllSongsForSearch } from '@/lib/queries'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import { SidebarProvider } from '@/components/SidebarProvider'
+import { getAllSongsForSearch, getAllReleases } from '@/lib/queries'
 import './globals.css'
 
 const geistSans = Geist({
@@ -31,23 +33,31 @@ export default async function RootLayout({
 }>) {
   // Handle build-time when DATABASE_URL isn't available
   let songs: Awaited<ReturnType<typeof getAllSongsForSearch>> = []
+  let releases: Awaited<ReturnType<typeof getAllReleases>> = []
   try {
-    songs = await getAllSongsForSearch()
+    ;[songs, releases] = await Promise.all([
+      getAllSongsForSearch(),
+      getAllReleases(),
+    ])
   } catch {
-    // Database not available during build, search will work at runtime
+    // Database not available during build, will work at runtime
   }
 
   return (
-    <html lang="en">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
       >
-        <FaroProvider />
-        <div className="flex min-h-screen flex-col">
-          <Header songs={songs} />
-          <main className="flex-1 py-8">{children}</main>
-          <Footer />
-        </div>
+        <ThemeProvider>
+          <SidebarProvider releases={releases}>
+            <FaroProvider />
+            <AppShell>
+              <Header songs={songs} />
+              <main className="flex-1 py-8">{children}</main>
+              <Footer />
+            </AppShell>
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

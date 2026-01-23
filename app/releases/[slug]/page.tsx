@@ -60,13 +60,13 @@ export default async function ReleasePage({ params }: PageProps) {
       {/* Back Link */}
       <Link
         href="/"
-        className="mb-6 inline-flex items-center text-sm text-neutral-500 transition-colors hover:text-black"
+        className="mb-6 inline-flex items-center text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
       >
         <span className="mr-1">←</span> Back to discography
       </Link>
 
       {/* Release Header */}
-      <header className="mb-8 border-b border-neutral-200 pb-8">
+      <header className="mb-8 border-b border-[var(--border-primary)] pb-8">
         <div className="flex gap-6">
           <AlbumCover
             src={release.coverArt}
@@ -75,15 +75,15 @@ export default async function ReleasePage({ params }: PageProps) {
             priority
           />
           <div>
-            <p className="mb-2 text-sm text-neutral-500">
+            <p className="mb-2 text-sm text-[var(--text-secondary)]">
               {getReleaseTypeLabel(release.type)} · {formatDate(release.releaseDate)}
             </p>
             <h1 className="text-3xl font-bold tracking-tight">
               <span lang="ja">{release.titleJp}</span>
             </h1>
-            <p className="mt-1 text-xl text-neutral-500">{release.titleRomaji}</p>
+            <p className="mt-1 text-xl text-[var(--text-secondary)]">{release.titleRomaji}</p>
             {release.titleEn && (
-              <p className="mt-1 text-neutral-400">{release.titleEn}</p>
+              <p className="mt-1 text-[var(--text-muted)]">{release.titleEn}</p>
             )}
           </div>
         </div>
@@ -91,28 +91,28 @@ export default async function ReleasePage({ params }: PageProps) {
 
       {/* Tracklist */}
       <section>
-        <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-neutral-400">
+        <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">
           Tracklist
         </h2>
 
         {release.tracks.length === 0 ? (
-          <p className="text-neutral-500">No tracks available.</p>
+          <p className="text-[var(--text-secondary)]">No tracks available.</p>
         ) : (
           <ol className="space-y-2">
             {release.tracks.map((track) => (
               <li key={track.id}>
                 <Link
                   href={`/lyrics/${track.song.slug}`}
-                  className="flex items-baseline gap-4 rounded-lg px-3 py-2 transition-colors hover:bg-neutral-50"
+                  className="flex items-baseline gap-4 rounded-lg px-3 py-2 transition-colors hover:bg-[var(--bg-secondary)]"
                 >
-                  <span className="w-6 text-right text-sm text-neutral-400">
+                  <span className="w-6 text-right text-sm text-[var(--text-muted)]">
                     {track.trackNumber}.
                   </span>
                   <span className="flex-1">
                     <span lang="ja" className="font-medium">
                       {track.song.titleJp}
                     </span>
-                    <span className="ml-2 text-neutral-500">
+                    <span className="ml-2 text-[var(--text-secondary)]">
                       {track.song.titleRomaji}
                     </span>
                   </span>

@@ -98,7 +98,7 @@ function LyricsContent({
       <div className="overflow-x-auto">
         <table className="w-full min-w-[800px] border-collapse">
           <thead>
-            <tr className="border-b border-neutral-200 text-left text-sm text-neutral-500">
+            <tr className="border-b border-[var(--border-primary)] text-left text-sm text-[var(--text-muted)]">
               <th className="pb-2 pr-4 font-medium">日本語</th>
               <th className="pb-2 pr-4 font-medium">Romaji</th>
               <th className="pb-2 font-medium">English</th>
@@ -106,7 +106,7 @@ function LyricsContent({
           </thead>
           <tbody className="lyrics-text">
             {Array.from({ length: maxLines }).map((_, i) => (
-              <tr key={i} className="border-b border-neutral-100">
+              <tr key={i} className="border-b border-[var(--border-primary)]">
                 <td className="py-1 pr-4 align-top" lang="ja">
                   {jpLines[i] || ''}
                 </td>
@@ -141,8 +141,8 @@ function LyricsContent({
                 {jp}
               </p>
             )}
-            {romaji && <p className="text-neutral-600">{romaji}</p>}
-            {en && <p className="text-neutral-500 italic">{en}</p>}
+            {romaji && <p className="text-[var(--text-secondary)]">{romaji}</p>}
+            {en && <p className="text-[var(--text-muted)] italic">{en}</p>}
           </div>
         )
       })}
@@ -177,7 +177,7 @@ export function LyricsPageClient({ song, trackContext }: LyricsPageClientProps) 
       {firstRelease && (
         <Link
           href={`/releases/${firstRelease.release.slug}`}
-          className="mb-6 inline-flex items-center text-sm text-neutral-500 transition-colors hover:text-black"
+          className="mb-6 inline-flex items-center text-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
         >
           <span className="mr-1">←</span> Back to {firstRelease.release.titleRomaji}
         </Link>
@@ -188,18 +188,18 @@ export function LyricsPageClient({ song, trackContext }: LyricsPageClientProps) 
         <h1 className="text-3xl font-bold tracking-tight">
           <span lang="ja">{song.titleJp}</span>
         </h1>
-        <p className="mt-1 text-xl text-neutral-500">{song.titleRomaji}</p>
+        <p className="mt-1 text-xl text-[var(--text-secondary)]">{song.titleRomaji}</p>
         {song.titleEn && (
-          <p className="mt-1 text-neutral-400">{song.titleEn}</p>
+          <p className="mt-1 text-[var(--text-muted)]">{song.titleEn}</p>
         )}
 
         {/* Release info */}
         {firstRelease && (
-          <p className="mt-3 text-sm text-neutral-500">
+          <p className="mt-3 text-sm text-[var(--text-secondary)]">
             Track {firstRelease.trackNumber} on{' '}
             <Link
               href={`/releases/${firstRelease.release.slug}`}
-              className="underline hover:text-black"
+              className="underline hover:text-[var(--text-primary)]"
             >
               {firstRelease.release.titleRomaji}
             </Link>
@@ -217,8 +217,8 @@ export function LyricsPageClient({ song, trackContext }: LyricsPageClientProps) 
             onClick={() => handleViewModeChange(mode)}
             className={`rounded-full px-3 py-1 text-sm transition-colors ${
               viewMode === mode
-                ? 'bg-black text-white'
-                : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                ? 'bg-[var(--bg-accent)] text-[var(--text-inverted)]'
+                : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)]'
             }`}
           >
             {viewModeLabels[mode]}
@@ -238,25 +238,25 @@ export function LyricsPageClient({ song, trackContext }: LyricsPageClientProps) 
 
       {/* Notes */}
       {song.notes && (
-        <section className="border-t border-neutral-200 pt-6">
-          <h2 className="mb-2 text-sm font-medium uppercase tracking-wider text-neutral-400">
+        <section className="border-t border-[var(--border-primary)] pt-6">
+          <h2 className="mb-2 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">
             Translation Notes
           </h2>
-          <p className="text-sm text-neutral-600">{song.notes}</p>
+          <p className="text-sm text-[var(--text-secondary)]">{song.notes}</p>
         </section>
       )}
 
       {/* Track Navigation */}
       {trackContext && (
-        <nav className="mt-8 border-t border-neutral-200 pt-6">
-          <div className="mb-4 text-center text-sm text-neutral-500">
+        <nav className="mt-8 border-t border-[var(--border-primary)] pt-6">
+          <div className="mb-4 text-center text-sm text-[var(--text-secondary)]">
             Track {trackContext.currentTrack} of {trackContext.totalTracks}
           </div>
           <div className="flex items-center justify-between gap-4">
             {trackContext.prevSong ? (
               <Link
                 href={`/lyrics/${trackContext.prevSong.slug}`}
-                className="flex items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 text-sm transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+                className="flex items-center gap-2 rounded-lg border border-[var(--border-primary)] px-4 py-2 text-sm transition-colors hover:border-[var(--border-secondary)] hover:bg-[var(--bg-secondary)]"
               >
                 <span>←</span>
                 <span className="hidden sm:inline">{trackContext.prevSong.titleRomaji}</span>
@@ -268,7 +268,7 @@ export function LyricsPageClient({ song, trackContext }: LyricsPageClientProps) 
             {trackContext.nextSong ? (
               <Link
                 href={`/lyrics/${trackContext.nextSong.slug}`}
-                className="flex items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 text-sm transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+                className="flex items-center gap-2 rounded-lg border border-[var(--border-primary)] px-4 py-2 text-sm transition-colors hover:border-[var(--border-secondary)] hover:bg-[var(--bg-secondary)]"
               >
                 <span className="hidden sm:inline">{trackContext.nextSong.titleRomaji}</span>
                 <span className="sm:hidden">Next</span>

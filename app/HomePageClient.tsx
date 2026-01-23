@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Container } from '@/components/layout'
 import { AlbumCover } from './components/ui/AlbumCover'
 import { AnimatedHero } from './components/ui/AnimatedHero'
+import { CollapsibleBanner } from './components/ui/CollapsibleBanner'
 import type { ReleaseWithTracks } from '@/types'
 
 type ReleaseFilter = 'ALL' | 'ALBUM' | 'EP' | 'SINGLE'
@@ -71,38 +72,21 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
           ${animationComplete ? 'opacity-100' : 'opacity-0'}
         `}
       >
+        {/* Collapsible Hero Banner */}
+        <CollapsibleBanner
+          imageSrc="/images/band-banner.jpg"
+          title="FUKURO LYRICS"
+          titleJp="梟"
+          subtitle="Japanese Visual Kei Lyrics Archive"
+        />
+
         <Container>
-          {/* Hero Section */}
-          <section className="mb-12 text-center">
-            <h1
-              className={`
-                mb-4 text-4xl font-bold tracking-tight
-                transition-all duration-500
-                ${animationComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
-              `}
-            >
-              <span lang="ja" className="mr-3">梟</span>
-              <span className="text-neutral-400">FUKURO</span>
-            </h1>
-
-            <p
-              className={`
-                mx-auto max-w-lg text-lg text-neutral-600
-                transition-all duration-500 delay-100
-                ${animationComplete ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
-              `}
-            >
-              Lyrics archive for the Japanese visual kei band 梟 (Fukuro).
-              Japanese, Romaji, and English translations.
-            </p>
-          </section>
-
           {/* Band Members */}
-          <section className="mb-12">
-            <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-neutral-400">
+          <section className="mb-8">
+            <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">
               Members
             </h2>
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-neutral-600">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[var(--text-secondary)]">
               <span>Yoshiatsu (Vo.)</span>
               <span>Daisuke (Gt.)</span>
               <span>Yutara (Ba.)</span>
@@ -115,7 +99,7 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
             <section className="mb-8 text-center">
               <button
                 onClick={handleRandomSong}
-                className="inline-flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-600 transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+                className="inline-flex items-center gap-2 rounded-full border border-[var(--border-primary)] bg-[var(--bg-secondary)] px-4 py-2 text-sm text-[var(--text-secondary)] transition-colors hover:border-[var(--border-secondary)] hover:bg-[var(--bg-tertiary)]"
               >
                 <span>🎲</span>
                 Discover a random song
@@ -126,12 +110,12 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
           {/* Featured Release */}
           {featuredRelease && (
             <section className="mb-8">
-              <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-neutral-400">
+              <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">
                 Latest Release
               </h2>
               <Link
                 href={`/releases/${featuredRelease.slug}`}
-                className="block rounded-xl border-2 border-neutral-900 bg-neutral-900 p-6 text-white transition-all hover:bg-neutral-800"
+                className="block rounded-xl border-2 border-[var(--bg-accent)] bg-[var(--bg-accent)] p-6 text-[var(--text-inverted)] transition-all hover:opacity-90"
               >
                 <div className="flex gap-5">
                   <AlbumCover
@@ -143,21 +127,21 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
                   <div className="flex flex-1 items-start justify-between gap-4">
                     <div>
                       {isRecentRelease(featuredRelease.releaseDate) && (
-                        <span className="mb-2 inline-block rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
+                        <span className="mb-2 inline-block rounded-full bg-[var(--status-success)] px-2 py-0.5 text-xs font-medium text-white">
                           New
                         </span>
                       )}
                       <h3 className="text-xl font-bold">
                         <span lang="ja">{featuredRelease.titleJp}</span>
-                        <span className="ml-2 text-neutral-400">
+                        <span className="ml-2 opacity-60">
                           {featuredRelease.titleRomaji}
                         </span>
                       </h3>
-                      <p className="mt-2 text-neutral-400">
-                        {featuredRelease.tracks.length} tracks
+                      <p className="mt-2 opacity-60">
+                        {featuredRelease.tracks.length} {featuredRelease.tracks.length === 1 ? 'track' : 'tracks'}
                       </p>
                     </div>
-                    <div className="text-right text-sm text-neutral-400">
+                    <div className="text-right text-sm opacity-60">
                       <p>{getReleaseTypeLabel(featuredRelease.type)}</p>
                       <p>{formatDate(featuredRelease.releaseDate)}</p>
                     </div>
@@ -170,7 +154,7 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
           {/* Discography */}
           <section>
             <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-              <h2 className="text-sm font-medium uppercase tracking-wider text-neutral-400">
+              <h2 className="text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">
                 All Releases
               </h2>
 
@@ -182,8 +166,8 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
                     onClick={() => setTypeFilter(type)}
                     className={`rounded-full px-3 py-1 text-sm transition-colors ${
                       typeFilter === type
-                        ? 'bg-black text-white'
-                        : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                        ? 'bg-[var(--bg-accent)] text-[var(--text-inverted)]'
+                        : 'bg-[var(--bg-secondary)] text-[var(--text-secondary)] hover:bg-[var(--bg-tertiary)]'
                     }`}
                   >
                     {type === 'ALL' ? 'All' : getReleaseTypeLabel(type)}
@@ -193,8 +177,8 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
             </div>
 
             {otherReleases.length === 0 ? (
-              <div className="rounded-lg border border-dashed border-neutral-300 p-8 text-center">
-                <p className="text-neutral-500">
+              <div className="rounded-lg border border-dashed border-[var(--border-secondary)] p-8 text-center">
+                <p className="text-[var(--text-muted)]">
                   {typeFilter === 'ALL'
                     ? 'No other releases yet.'
                     : `No ${getReleaseTypeLabel(typeFilter).toLowerCase()}s found.`}
@@ -206,7 +190,7 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
                   <Link
                     key={release.id}
                     href={`/releases/${release.slug}`}
-                    className="block rounded-lg border border-neutral-200 p-4 transition-colors hover:border-neutral-300 hover:bg-neutral-50"
+                    className="block rounded-lg border border-[var(--border-primary)] p-4 transition-colors hover:border-[var(--border-secondary)] hover:bg-[var(--bg-secondary)]"
                   >
                     <div className="flex gap-4">
                       <AlbumCover
@@ -217,21 +201,21 @@ export function HomePageClient({ releases, allSongSlugs = [] }: HomePageClientPr
                       <div className="flex flex-1 items-start justify-between gap-4">
                         <div>
                           {isRecentRelease(release.releaseDate) && (
-                            <span className="mb-1 inline-block rounded-full bg-green-500 px-2 py-0.5 text-xs font-medium text-white">
+                            <span className="mb-1 inline-block rounded-full bg-[var(--status-success)] px-2 py-0.5 text-xs font-medium text-white">
                               New
                             </span>
                           )}
                           <h3 className="font-medium">
                             <span lang="ja">{release.titleJp}</span>
-                            <span className="ml-2 text-neutral-500">
+                            <span className="ml-2 text-[var(--text-muted)]">
                               {release.titleRomaji}
                             </span>
                           </h3>
-                          <p className="mt-1 text-sm text-neutral-500">
-                            {release.tracks.length} tracks
+                          <p className="mt-1 text-sm text-[var(--text-muted)]">
+                            {release.tracks.length} {release.tracks.length === 1 ? 'track' : 'tracks'}
                           </p>
                         </div>
-                        <div className="text-right text-sm text-neutral-500">
+                        <div className="text-right text-sm text-[var(--text-muted)]">
                           <p>{getReleaseTypeLabel(release.type)}</p>
                           <p>{formatDate(release.releaseDate)}</p>
                         </div>

@@ -28,10 +28,10 @@ export function AlbumCover({
   if (!src) {
     return (
       <div
-        className={`flex items-center justify-center rounded-lg bg-neutral-100 ${className}`}
+        className={`flex items-center justify-center rounded-lg bg-[var(--bg-secondary)] ${className}`}
         style={{ width, height }}
       >
-        <span className="text-2xl text-neutral-300" lang="ja">梟</span>
+        <span className="text-2xl text-[var(--text-muted)]" lang="ja">梟</span>
       </div>
     )
   }

@@ -13,7 +13,7 @@ export default function AboutPage() {
 
       <section className="mb-8">
         <h2 className="mb-3 text-lg font-semibold">About This Site</h2>
-        <p className="text-neutral-600 leading-relaxed">
+        <p className="text-[var(--text-secondary)] leading-relaxed">
           FUKURO LYRICS is an unofficial fan-made archive of lyrics for the Japanese
           visual kei band 梟 (Fukuro). The site provides lyrics in three formats:
           the original Japanese text, Romanized Japanese (Romaji), and English translations.
@@ -22,11 +22,11 @@ export default function AboutPage() {
 
       <section className="mb-8">
         <h2 className="mb-3 text-lg font-semibold">About the Band</h2>
-        <p className="text-neutral-600 leading-relaxed mb-4">
+        <p className="text-[var(--text-secondary)] leading-relaxed mb-4">
           梟 (Fukuro, meaning &ldquo;owl&rdquo; in Japanese) is a visual kei band known for their
           dynamic sound and evocative lyrics. The current lineup consists of:
         </p>
-        <ul className="list-disc list-inside text-neutral-600 space-y-1">
+        <ul className="list-disc list-inside text-[var(--text-secondary)] space-y-1">
           <li>Yoshiatsu — Vocals</li>
           <li>Daisuke — Guitar</li>
           <li>Yutara — Bass</li>
@@ -36,7 +36,7 @@ export default function AboutPage() {
 
       <section className="mb-8">
         <h2 className="mb-3 text-lg font-semibold">Translation Disclaimer</h2>
-        <p className="text-neutral-600 leading-relaxed">
+        <p className="text-[var(--text-secondary)] leading-relaxed">
           All translations on this site are unofficial and may contain errors or
           interpretive choices. Japanese lyrics often contain wordplay, cultural
           references, and poetic ambiguity that can be difficult to capture in
@@ -46,7 +46,7 @@ export default function AboutPage() {
 
       <section>
         <h2 className="mb-3 text-lg font-semibold">Official Links</h2>
-        <p className="text-neutral-600 leading-relaxed">
+        <p className="text-[var(--text-secondary)] leading-relaxed">
           To support the band, please check out their official channels and purchase
           their music through official distributors.
         </p>

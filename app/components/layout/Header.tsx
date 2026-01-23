@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { Container } from './Container'
 import { SearchBar } from './SearchBar'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import type { SongSearchResult } from '@/types'
 
 interface HeaderProps {
@@ -9,44 +9,39 @@ interface HeaderProps {
 
 export function Header({ songs = [] }: HeaderProps) {
   return (
-    <header className="border-b border-neutral-200 py-6">
-      <Container>
-        <nav className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-semibold tracking-tight">
-            <span className="mr-2">梟</span>
-            <span className="text-neutral-500">FUKURO LYRICS</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <SearchBar songs={songs} />
-            <ul className="flex items-center gap-6 text-sm">
-              <li>
-                <Link
-                  href="/"
-                  className="text-neutral-600 transition-colors hover:text-black"
-                >
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/library"
-                  className="text-neutral-600 transition-colors hover:text-black"
-                >
-                  Library
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/about"
-                  className="text-neutral-600 transition-colors hover:text-black"
-                >
-                  About
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </nav>
-      </Container>
+    <header className="border-b border-[var(--border-primary)] py-4">
+      <div className="flex items-center justify-between px-4">
+        {/* Tagline */}
+        <span className="text-sm text-[var(--text-muted)]">
+          Fan Site
+        </span>
+
+        {/* Right side: nav + search + theme */}
+        <div className="flex items-center gap-4">
+          <nav className="hidden items-center gap-4 text-sm md:flex">
+            <Link
+              href="/"
+              className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+            >
+              Home
+            </Link>
+            <Link
+              href="/library"
+              className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+            >
+              Library
+            </Link>
+            <Link
+              href="/about"
+              className="text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
+            >
+              About
+            </Link>
+          </nav>
+          <SearchBar songs={songs} />
+          <ThemeToggle />
+        </div>
+      </div>
     </header>
   )
 }
