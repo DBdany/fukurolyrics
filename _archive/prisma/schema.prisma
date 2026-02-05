@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Release {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  titleJp     String      @map("title_jp")
+  titleRomaji String      @map("title_romaji")
+  titleEn     String?     @map("title_en")
+  releaseDate DateTime    @map("release_date")
+  type        ReleaseType
+  coverArt    String?     @map("cover_art")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  tracks      TrackOnRelease[]
+
+  @@map("releases")
+}
+
+model Song {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  titleJp      String   @map("title_jp")
+  titleRomaji  String   @map("title_romaji")
+  titleEn      String?  @map("title_en")
+  lyricsJp     String   @map("lyrics_jp")
+  lyricsRomaji String   @map("lyrics_romaji")
+  lyricsEn     String   @map("lyrics_en")
+  notes        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  releases     TrackOnRelease[]
+
+  @@map("songs")
+}
+
+model TrackOnRelease {
+  id          String  @id @default(cuid())
+  releaseId   String  @map("release_id")
+  songId      String  @map("song_id")
+  trackNumber Int     @map("track_number")
+
+  release     Release @relation(fields: [releaseId], references: [id], onDelete: Cascade)
+  song        Song    @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@unique([releaseId, songId])
+  @@unique([releaseId, trackNumber])
+  @@map("tracks_on_releases")
+}
+
+enum ReleaseType {
+  ALBUM
+  EP
+  SINGLE
+}

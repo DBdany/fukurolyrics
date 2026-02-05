@@ -61,3 +61,86 @@ enum ReleaseType {
   EP
   SINGLE
 }
+
+// ============================================
+// COMMUNITY FEATURES
+// ============================================
+
+model ForumCategory {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  name        String
+  nameJp      String?       @map("name_jp")
+  description String
+  threads     ForumThread[]
+  createdAt   DateTime      @default(now()) @map("created_at")
+
+  @@map("forum_categories")
+}
+
+model ForumThread {
+  id         String        @id @default(cuid())
+  slug       String        @unique
+  title      String
+  categoryId String        @map("category_id")
+  category   ForumCategory @relation(fields: [categoryId], references: [id])
+  authorName String        @map("author_name")
+  posts      ForumPost[]
+  isPinned   Boolean       @default(false) @map("is_pinned")
+  isLocked   Boolean       @default(false) @map("is_locked")
+  views      Int           @default(0)
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
+
+  @@map("forum_threads")
+}
+
+model ForumPost {
+  id         String      @id @default(cuid())
+  threadId   String      @map("thread_id")
+  thread     ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  authorName String      @map("author_name")
+  content    String
+  likes      Int         @default(0)
+  createdAt  DateTime    @default(now()) @map("created_at")
+
+  @@map("forum_posts")
+}
+
+model Member {
+  id           String     @id @default(cuid())
+  username     String     @unique
+  displayName  String     @map("display_name")
+  bio          String?
+  favoriteSong String?    @map("favorite_song")
+  accentColor  String     @default("#ff69b4") @map("accent_color")
+  role         MemberRole @default(MEMBER)
+  postCount    Int        @default(0) @map("post_count")
+  joinDate     DateTime   @default(now()) @map("join_date")
+
+  @@map("members")
+}
+
+enum MemberRole {
+  ADMIN
+  MODERATOR
+  MEMBER
+}
+
+model GuestbookEntry {
+  id        String   @id @default(cuid())
+  name      String
+  message   String
+  signature String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("guestbook_entries")
+}
+
+model SiteStats {
+  id        String   @id @default("visitor_count")
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("site_stats")
+}

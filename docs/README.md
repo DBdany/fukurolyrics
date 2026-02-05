@@ -6,22 +6,39 @@ this is a fan-made lyrics site for the japanese visual kei band 梟 (fukuro). we
 
 ## quick links
 
+- [architecture](./architecture.md) - how the codebase is organized
+- [development](./development.md) - running the site locally
+- [deployment](./deployment.md) - github actions + fly.io ci/cd
 - [adding lyrics](./adding-lyrics.md) - how to add songs to the database
 - [images & cdn](./images.md) - adding album artwork
-- [development](./development.md) - running the site locally
+- [hosting](./hosting.md) - fly.io infrastructure and costs
 - [contributing](./contributing.md) - how to help out
 
 ## tech stack
 
-- next.js 14+ (app router)
+- next.js 16 (app router)
 - typescript
 - tailwind css v4
 - postgres + prisma
-- docker for local db
+- fly.io (hosting)
+- cloudflare r2 (images)
+- github actions (ci/cd)
 
 ## live site
 
-the site is deployed at [fukurolyrics.com](https://fukurolyrics.com) (or wherever its hosted).
+the site is deployed at [fukurolyrics.com](https://fukurolyrics.com).
+
+## quick start
+
+```bash
+git clone git@github.com:DBdany/fukurolyrics.git
+cd fukurolyrics
+pnpm install
+docker-compose up -d
+pnpm db:migrate
+pnpm db:seed
+pnpm dev
+```
 
 ## questions?
 

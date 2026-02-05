@@ -1,53 +1,136 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --color-bg: #ffffff;
-  --color-text: #000000;
-  --color-text-muted: #666666;
-  --color-border: #e0e0e0;
-  --color-hover: #f5f5f5;
-}
-
-@theme inline {
-  --color-background: var(--color-bg);
-  --color-foreground: var(--color-text);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-body {
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-sans), system-ui, sans-serif;
-}
-
-/* Typography for lyrics - generous line height for readability */
-.lyrics-text {
-  font-size: 1.125rem;
-  line-height: 1.8;
-}
-
-/* Japanese text styling */
-[lang="ja"] {
-  font-feature-settings: "palt";
-}
-
-/* Homepage intro animation */
-@keyframes contentReveal {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
   }
 }
 
-.animate-content-reveal {
-  animation: contentReveal 0.6s ease-out forwards;
+@layer base {
+  :root {
+    /* Dark gothic theme for FUKURO fan site */
+    --background: 270 15% 5%;
+    --foreground: 270 10% 90%;
+    --card: 270 20% 8%;
+    --card-foreground: 270 10% 90%;
+    --popover: 270 20% 10%;
+    --popover-foreground: 270 10% 90%;
+    --primary: 330 100% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 270 30% 15%;
+    --secondary-foreground: 270 10% 90%;
+    --muted: 270 20% 12%;
+    --muted-foreground: 270 10% 60%;
+    --accent: 195 100% 50%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 270 30% 20%;
+    --input: 270 20% 15%;
+    --ring: 330 100% 60%;
+    --chart-1: 330 100% 60%;
+    --chart-2: 195 100% 50%;
+    --chart-3: 45 100% 60%;
+    --chart-4: 270 50% 50%;
+    --chart-5: 0 70% 50%;
+    --radius: 0.25rem;
+    --sidebar-background: 270 20% 6%;
+    --sidebar-foreground: 270 10% 90%;
+    --sidebar-primary: 330 100% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 30% 12%;
+    --sidebar-accent-foreground: 270 10% 90%;
+    --sidebar-border: 270 30% 20%;
+    --sidebar-ring: 330 100% 60%;
+    /* Custom colors for the retro theme */
+    --neon-pink: 330 100% 60%;
+    --neon-blue: 195 100% 50%;
+    --neon-gold: 45 100% 60%;
+    --deep-purple: 270 50% 20%;
+    --crimson: 0 70% 40%;
+  }
 }
 
-.animate-settle {
-  animation: none;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+  }
+}
+
+/* Retro styling utilities */
+@layer utilities {
+  .glow-pink {
+    text-shadow: 0 0 10px hsl(330 100% 60%), 0 0 20px hsl(330 100% 60% / 0.5), 0 0 30px hsl(330 100% 60% / 0.3);
+  }
+  .glow-blue {
+    text-shadow: 0 0 10px hsl(195 100% 50%), 0 0 20px hsl(195 100% 50% / 0.5), 0 0 30px hsl(195 100% 50% / 0.3);
+  }
+  .glow-gold {
+    text-shadow: 0 0 10px hsl(45 100% 60%), 0 0 20px hsl(45 100% 60% / 0.5), 0 0 30px hsl(45 100% 60% / 0.3);
+  }
+  .retro-border {
+    border: 2px solid;
+    border-image: linear-gradient(135deg, hsl(330 100% 60%), hsl(195 100% 50%), hsl(45 100% 60%)) 1;
+  }
+  .retro-window {
+    background: linear-gradient(180deg, hsl(270 30% 15%) 0%, hsl(270 20% 8%) 100%);
+    border: 1px solid hsl(270 30% 25%);
+    box-shadow: 
+      inset 1px 1px 0 hsl(270 30% 30%),
+      inset -1px -1px 0 hsl(270 20% 5%),
+      0 4px 20px hsl(0 0% 0% / 0.5);
+  }
+  .pixel-corners {
+    clip-path: polygon(
+      0 4px, 4px 4px, 4px 0,
+      calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
+      100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%,
+      4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
+    );
+  }
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* Starfield animation */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse glow animation */
+@keyframes pulse-glow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 5px hsl(330 100% 60%));
+  }
+  50% { 
+    filter: drop-shadow(0 0 20px hsl(330 100% 60%)) drop-shadow(0 0 30px hsl(330 100% 60% / 0.5));
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
