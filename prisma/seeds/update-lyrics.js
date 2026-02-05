@@ -1,8 +1,8 @@
 "use strict";
 
 // prisma/update-lyrics.ts
-var import_client = require("@prisma/client");
-var prisma = new import_client.PrismaClient();
+import { PrismaClient } from "@prisma/client";
+var prisma = new PrismaClient();
 async function main() {
   console.log("Updating lyrics from collection...");
   await prisma.song.update({
