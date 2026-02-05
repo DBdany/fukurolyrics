@@ -1,64 +1,61 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import { Header, Footer, AppShell } from '@/components/layout'
-import { FaroProvider } from '@/components/analytics'
-import { ThemeProvider } from '@/components/ThemeProvider'
-import { SidebarProvider } from '@/components/SidebarProvider'
-import { getAllSongsForSearch, getAllReleases } from '@/lib/queries'
+import React from "react"
+import type { Metadata, Viewport } from 'next'
+import { VT323, Inter, Noto_Sans_JP } from 'next/font/google'
+
 import './globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const vt323 = VT323({ 
+  weight: '400',
   subsets: ['latin'],
+  variable: '--font-pixel'
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const inter = Inter({ 
   subsets: ['latin'],
+  variable: '--font-sans'
+})
+
+const notoSansJP = Noto_Sans_JP({ 
+  subsets: ['latin'],
+  variable: '--font-jp'
 })
 
 export const metadata: Metadata = {
   title: {
-    default: 'FUKURO LYRICS | 梟 - Japanese & English Translations',
-    template: '%s | FUKURO LYRICS',
+    default: 'FUKURO Shrine - Visual Kei Lyrics & Fan Community',
+    template: '%s | FUKURO Shrine',
   },
-  description:
-    'Lyrics for the Japanese visual kei band 梟 (Fukuro) in Japanese, Romaji, and English translations.',
+  description: 'The ultimate fan shrine dedicated to FUKURO (梟), featuring lyrics, translations, discography, and community forums. Welcome to the darkness.',
+  keywords: ['fukuro', '梟', 'visual kei', 'vkei', 'lyrics', 'fan site', 'japanese rock', 'jrock'],
+  icons: {
+    icon: '/icon.svg',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: 'FUKURO Shrine',
+    title: 'FUKURO Shrine - Visual Kei Lyrics & Fan Community',
+    description: 'The ultimate fan shrine dedicated to FUKURO (梟), featuring lyrics, translations, discography, and community forums.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'FUKURO Shrine',
+    description: 'Visual Kei lyrics & fan community dedicated to FUKURO (梟)',
+  },
 }
 
-export default async function RootLayout({
+export const viewport: Viewport = {
+  themeColor: '#1a0a1f',
+}
+
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  // Handle build-time when DATABASE_URL isn't available
-  let songs: Awaited<ReturnType<typeof getAllSongsForSearch>> = []
-  let releases: Awaited<ReturnType<typeof getAllReleases>> = []
-  try {
-    ;[songs, releases] = await Promise.all([
-      getAllSongsForSearch(),
-      getAllReleases(),
-    ])
-  } catch {
-    // Database not available during build, will work at runtime
-  }
-
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
-      >
-        <ThemeProvider>
-          <SidebarProvider releases={releases}>
-            <FaroProvider />
-            <AppShell>
-              <Header songs={songs} />
-              <main className="flex-1 py-8">{children}</main>
-              <Footer />
-            </AppShell>
-          </SidebarProvider>
-        </ThemeProvider>
-      </body>
+    <html lang="en">
+      <body className={`${vt323.variable} ${inter.variable} ${notoSansJP.variable} font-sans antialiased`}>{children}</body>
     </html>
   )
 }
