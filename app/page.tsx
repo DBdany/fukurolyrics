@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { SiteLayout } from "@/components/retro/site-layout"
 import { RetroWindow } from "@/components/retro/retro-window"
 import { HitCounter } from "@/components/retro/hit-counter"

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { SiteLayout } from "@/components/retro/site-layout"
 import { RetroWindow } from "@/components/retro/retro-window"
 import { getForumCategory } from "@/lib/queries"
