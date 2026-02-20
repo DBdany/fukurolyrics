@@ -1000,56 +1000,7 @@ async function main() {
 
   console.log('Created members')
 
-  // ============================================
-  // GUESTBOOK ENTRIES
-  // ============================================
-
-  console.log('Seeding guestbook entries...')
-
-  await prisma.guestbookEntry.deleteMany()
-
-  await Promise.all([
-    prisma.guestbookEntry.create({
-      data: {
-        name: 'Maria from Brazil',
-        message: 'Love this site! Finally a place for international Fukuro fans to connect!',
-        signature: '~*~ Maria ~*~',
-        createdAt: new Date('2024-01-15'),
-      },
-    }),
-    prisma.guestbookEntry.create({
-      data: {
-        name: 'Anonymous Owl',
-        message: 'This brings back memories of old fan sites. The retro aesthetic is perfect!',
-        createdAt: new Date('2024-02-20'),
-      },
-    }),
-    prisma.guestbookEntry.create({
-      data: {
-        name: 'TK',
-        message: 'Found this through a friend. The lyrics database is exactly what I needed for my cover videos!',
-        signature: '- TK',
-        createdAt: new Date('2024-03-05'),
-      },
-    }),
-    prisma.guestbookEntry.create({
-      data: {
-        name: 'Sakura',
-        message: 'ありがとう！This site is so cute and nostalgic. Keep up the great work!',
-        signature: '桜より',
-        createdAt: new Date('2024-04-12'),
-      },
-    }),
-    prisma.guestbookEntry.create({
-      data: {
-        name: 'VK Fan Forever',
-        message: 'The dedication here is amazing. Fukuro deserves more international recognition!',
-        createdAt: new Date('2024-05-01'),
-      },
-    }),
-  ])
-
-  console.log('Created guestbook entries')
+  // Guestbook entries: no seed data — entries come from real visitors
 
   // Summary
   const songCount = await prisma.song.count()

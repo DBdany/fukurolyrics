@@ -7,12 +7,12 @@ import { Home, Disc, FileText, MessageSquare, Users, BookOpen, Menu, X } from "l
 import { useState } from "react"
 
 const navItems = [
-  { href: "/", label: "Home", labelJp: "ホーム", icon: Home },
-  { href: "/discography", label: "Discography", labelJp: "作品", icon: Disc, comingSoon: true },
-  { href: "/lyrics", label: "Lyrics", labelJp: "歌詞", icon: FileText },
-  { href: "/forum", label: "Forum", labelJp: "掲示板", icon: MessageSquare, comingSoon: true },
-  { href: "/members", label: "Members", labelJp: "仲間", icon: Users, comingSoon: true },
-  { href: "/guestbook", label: "Guestbook", labelJp: "足跡", icon: BookOpen, comingSoon: true },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/discography", label: "Discography", icon: Disc, comingSoon: true },
+  { href: "/lyrics", label: "Lyrics", icon: FileText },
+  { href: "/forum", label: "Forum", icon: MessageSquare, comingSoon: true },
+  { href: "/members", label: "Members", icon: Users, comingSoon: true },
+  { href: "/guestbook", label: "Guestbook", icon: BookOpen },
 ]
 
 export function Navigation() {
@@ -79,12 +79,7 @@ export function Navigation() {
                     )}
                   >
                     <Icon className="w-4 h-4" />
-                    <div className="flex flex-col">
-                      <span className="text-sm">{item.label}</span>
-                      <span className="font-[family-name:var(--font-jp)] text-[10px] text-muted-foreground">
-                        {item.labelJp}
-                      </span>
-                    </div>
+                    <span className="text-sm">{item.label}</span>
                   </Link>
                 </li>
               )
@@ -168,9 +163,6 @@ export function Navigation() {
                     >
                       <Icon className="w-4 h-4" />
                       <span>{item.label}</span>
-                      <span className="font-[family-name:var(--font-jp)] text-xs text-muted-foreground ml-auto">
-                        {item.labelJp}
-                      </span>
                     </Link>
                   </li>
                 )

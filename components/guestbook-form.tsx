@@ -1,24 +1,42 @@
 "use client"
 
-import { useState } from "react"
-import { PenLine, Sparkles } from "lucide-react"
+import { useRef, useState, useTransition } from "react"
+import { PenLine, Sparkles, Loader2, Check } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { RetroWindow } from "@/components/retro/retro-window"
+import type { SignGuestbookResult } from "@/app/guestbook/actions"
 
-export function GuestbookForm() {
-  const [name, setName] = useState("")
-  const [message, setMessage] = useState("")
-  const [signature, setSignature] = useState("")
+export function GuestbookForm({
+  action,
+}: {
+  action: (formData: FormData) => Promise<SignGuestbookResult>
+}) {
+  const formRef = useRef<HTMLFormElement>(null)
+  const [isPending, startTransition] = useTransition()
+  const [feedback, setFeedback] = useState<{ type: "success" | "error"; message: string } | null>(null)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    // TODO: Implement form submission with server action
-    alert("Guestbook signing coming soon!")
+    const formData = new FormData(e.currentTarget)
+
+    setFeedback(null)
+
+    startTransition(async () => {
+      const result = await action(formData)
+
+      if (result.success) {
+        formRef.current?.reset()
+        setFeedback({ type: "success", message: "signed! thanks for stopping by ♥" })
+        setTimeout(() => setFeedback(null), 4000)
+      } else {
+        setFeedback({ type: "error", message: result.error })
+      }
+    })
   }
 
   return (
     <RetroWindow title="sign_guestbook.html">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-4">
         <div className="flex items-center gap-2 text-xs font-[family-name:var(--font-pixel)] text-primary mb-4">
           <PenLine className="w-4 h-4" />
           <span>{">> Sign the guestbook"}</span>
@@ -31,11 +49,11 @@ export function GuestbookForm() {
             </label>
             <input
               id="name"
+              name="name"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
               placeholder="Your name or alias"
               required
+              maxLength={50}
               className={cn(
                 "w-full px-3 py-2 bg-black/30 border border-border rounded",
                 "text-foreground placeholder:text-muted-foreground/50 text-sm",
@@ -50,11 +68,11 @@ export function GuestbookForm() {
             </label>
             <textarea
               id="message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              name="message"
               placeholder="Leave your message here..."
               rows={4}
               required
+              maxLength={500}
               className={cn(
                 "w-full px-3 py-2 bg-black/30 border border-border rounded resize-none",
                 "text-foreground placeholder:text-muted-foreground/50 text-sm",
@@ -69,10 +87,10 @@ export function GuestbookForm() {
             </label>
             <input
               id="signature"
+              name="signature"
               type="text"
-              value={signature}
-              onChange={(e) => setSignature(e.target.value)}
               placeholder="~*~ your signature ~*~"
+              maxLength={100}
               className={cn(
                 "w-full px-3 py-2 bg-black/30 border border-border rounded",
                 "text-foreground placeholder:text-muted-foreground/50 text-sm italic",
@@ -81,13 +99,37 @@ export function GuestbookForm() {
             />
           </div>
 
+          {/* Feedback message */}
+          {feedback && (
+            <div
+              className={cn(
+                "text-xs font-[family-name:var(--font-pixel)] px-3 py-2 rounded border",
+                feedback.type === "success"
+                  ? "text-green-400 border-green-400/30 bg-green-400/5"
+                  : "text-red-400 border-red-400/30 bg-red-400/5"
+              )}
+            >
+              {feedback.message}
+            </div>
+          )}
+
           <div className="flex justify-end">
             <button
               type="submit"
-              className="flex items-center gap-2 px-6 py-2 bg-accent text-accent-foreground rounded font-[family-name:var(--font-pixel)] text-sm hover:bg-accent/90 transition-colors"
+              disabled={isPending}
+              className={cn(
+                "flex items-center gap-2 px-6 py-2 bg-accent text-accent-foreground rounded font-[family-name:var(--font-pixel)] text-sm transition-colors",
+                isPending ? "opacity-60 cursor-not-allowed" : "hover:bg-accent/90"
+              )}
             >
-              <Sparkles className="w-4 h-4" />
-              Sign Guestbook
+              {isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : feedback?.type === "success" ? (
+                <Check className="w-4 h-4" />
+              ) : (
+                <Sparkles className="w-4 h-4" />
+              )}
+              {isPending ? "Signing..." : "Sign Guestbook"}
             </button>
           </div>
         </div>
