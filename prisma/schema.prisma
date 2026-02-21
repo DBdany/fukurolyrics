@@ -79,13 +79,14 @@ model ForumCategory {
 }
 
 model ForumThread {
-  id         String        @id @default(cuid())
-  slug       String        @unique
-  title      String
-  categoryId String        @map("category_id")
-  category   ForumCategory @relation(fields: [categoryId], references: [id])
-  authorName String        @map("author_name")
-  posts      ForumPost[]
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  title       String
+  categoryId  String        @map("category_id")
+  category    ForumCategory @relation(fields: [categoryId], references: [id])
+  clerkUserId String?       @map("clerk_user_id")
+  authorName  String        @map("author_name")
+  posts       ForumPost[]
   isPinned   Boolean       @default(false) @map("is_pinned")
   isLocked   Boolean       @default(false) @map("is_locked")
   views      Int           @default(0)
@@ -96,10 +97,11 @@ model ForumThread {
 }
 
 model ForumPost {
-  id         String      @id @default(cuid())
-  threadId   String      @map("thread_id")
-  thread     ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
-  authorName String      @map("author_name")
+  id          String      @id @default(cuid())
+  threadId    String      @map("thread_id")
+  thread      ForumThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  clerkUserId String?     @map("clerk_user_id")
+  authorName  String      @map("author_name")
   content    String
   likes      Int         @default(0)
   createdAt  DateTime    @default(now()) @map("created_at")
