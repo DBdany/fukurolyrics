@@ -4,9 +4,10 @@ import { SiteLayout } from "@/components/retro/site-layout"
 import { RetroWindow } from "@/components/retro/retro-window"
 import { getForumThread, getForumCategory } from "@/lib/queries"
 import Link from "next/link"
-import { Pin, Lock, Heart, Quote, Flag } from "lucide-react"
+import { Pin, Lock } from "lucide-react"
 import { notFound } from "next/navigation"
 import { ForumReplyComposer } from "@/components/forum-reply-composer"
+import { ForumPostActions } from "@/components/forum-post-actions"
 import { BackToTop } from "@/components/back-to-top"
 
 interface ThreadPageProps {
@@ -94,21 +95,7 @@ export default async function ForumThreadPage({ params }: ThreadPageProps) {
                 </div>
 
                 {/* Post Footer */}
-                <div className="flex items-center justify-between pt-3 border-t border-border">
-                  <div className="flex items-center gap-4">
-                    <button className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors">
-                      <Heart className="w-4 h-4" />
-                      <span>{post.likes}</span>
-                    </button>
-                    <button className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-accent transition-colors">
-                      <Quote className="w-4 h-4" />
-                      <span>Quote</span>
-                    </button>
-                  </div>
-                  <button className="text-xs text-muted-foreground hover:text-destructive transition-colors">
-                    <Flag className="w-4 h-4" />
-                  </button>
-                </div>
+                <ForumPostActions postId={post.id} initialLikes={post.likes} />
               </article>
             </RetroWindow>
           ))}
@@ -117,7 +104,7 @@ export default async function ForumThreadPage({ params }: ThreadPageProps) {
         {/* Reply Composer */}
         {!thread.isLocked && (
           <div className="mt-8">
-            <ForumReplyComposer />
+            <ForumReplyComposer threadId={thread.id} />
           </div>
         )}
 

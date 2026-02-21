@@ -109,6 +109,11 @@ export default async function ForumPage() {
             <div className="text-xs font-[family-name:var(--font-pixel)] text-muted-foreground mb-4">
               {">> Latest threads across all categories"}
             </div>
+            {latestThreads.length === 0 && (
+              <div className="text-center py-4 text-muted-foreground font-[family-name:var(--font-pixel)] text-sm">
+                {">> No threads yet. Be the first to start a discussion!"}
+              </div>
+            )}
             <ul className="space-y-3">
               {latestThreads.map((thread) => {
                 return (
@@ -150,17 +155,6 @@ export default async function ForumPage() {
           </RetroWindow>
         </div>
 
-        {/* Online Users */}
-        <div className="mt-6 text-center">
-          <p className="font-[family-name:var(--font-pixel)] text-xs text-muted-foreground">
-            {">> Currently online: "}
-            <span className="text-primary">OwlAdmin</span>
-            {", "}
-            <span className="text-accent">NightOwl23</span>
-            {", "}
-            <span className="text-foreground">3 guests</span>
-          </p>
-        </div>
       </div>
     </SiteLayout>
   )
