@@ -742,8 +742,6 @@ async function main() {
 
   console.log('Seeding forum categories...')
 
-  await prisma.forumPost.deleteMany()
-  await prisma.forumThread.deleteMany()
   await prisma.forumCategory.deleteMany()
 
   const forumCategories = await Promise.all([
@@ -781,139 +779,9 @@ async function main() {
     }),
   ])
 
-  const [generalCat, lyricsCat, livesCat, mediaCat] = forumCategories
-
   console.log(`Created ${forumCategories.length} forum categories`)
 
-  // ============================================
-  // FORUM THREADS & POSTS
-  // ============================================
-
-  console.log('Seeding forum threads...')
-
-  const threads = await Promise.all([
-    // General threads
-    prisma.forumThread.create({
-      data: {
-        slug: 'welcome-new-members',
-        title: 'Welcome New Members! Introduce Yourself Here',
-        categoryId: generalCat.id,
-        authorName: 'OwlAdmin',
-        isPinned: true,
-        views: 342,
-      },
-    }),
-    prisma.forumThread.create({
-      data: {
-        slug: 'favorite-fukuro-song',
-        title: 'What\'s your favorite Fukuro song and why?',
-        categoryId: generalCat.id,
-        authorName: 'NightOwl23',
-        views: 156,
-      },
-    }),
-    // Lyrics threads
-    prisma.forumThread.create({
-      data: {
-        slug: 'ningen-ja-nai-meaning',
-        title: 'The deeper meaning behind 人間じゃない',
-        categoryId: lyricsCat.id,
-        authorName: 'LyricsNerd',
-        views: 289,
-      },
-    }),
-    prisma.forumThread.create({
-      data: {
-        slug: 'neo-tokyo-translation-help',
-        title: 'Need help with NEO TOKYO translation nuances',
-        categoryId: lyricsCat.id,
-        authorName: 'TokyoDreamer',
-        views: 98,
-      },
-    }),
-    // Lives threads
-    prisma.forumThread.create({
-      data: {
-        slug: 'shibuya-live-report-2024',
-        title: '[Live Report] Shibuya O-EAST 2024.10.15',
-        categoryId: livesCat.id,
-        authorName: 'ConcertGoer',
-        views: 445,
-      },
-    }),
-    // Media threads
-    // prisma.forumThread.create({
-    //   data: {
-    //     slug: 'guitar-covers-thread',
-    //     title: 'Guitar covers compilation thread',
-    //     categoryId: mediaCat.id,
-    //     authorName: 'GuitarOwl',
-    //     views: 167,
-    //   },
-    // }),
-  ])
-
-  console.log(`Created ${threads.length} forum threads`)
-
-  // Add posts to threads
-  console.log('Seeding forum posts...')
-
-  await Promise.all([
-    // Welcome thread posts
-    prisma.forumPost.create({
-      data: {
-        threadId: threads[0].id,
-        authorName: 'OwlAdmin',
-        content: 'Welcome to the Fukuro fan community! Feel free to introduce yourself and share how you discovered the band. We\'re all friends here!',
-        likes: 24,
-      },
-    }),
-    prisma.forumPost.create({
-      data: {
-        threadId: threads[0].id,
-        authorName: 'NewFan2024',
-        content: 'Hi everyone! I discovered Fukuro through a friend\'s playlist and immediately fell in love with their sound. NEO TOKYO was my first song!',
-        likes: 8,
-      },
-    }),
-    // Favorite song thread posts
-    prisma.forumPost.create({
-      data: {
-        threadId: threads[1].id,
-        authorName: 'NightOwl23',
-        content: 'For me it has to be 人間じゃない. The raw emotion in that song is unmatched. What about you all?',
-        likes: 15,
-      },
-    }),
-    prisma.forumPost.create({
-      data: {
-        threadId: threads[1].id,
-        authorName: 'MidnightListener',
-        content: 'I\'m torn between カデンツァ and 卑怯者のロマンス. Both hit different at 2am...',
-        likes: 12,
-      },
-    }),
-    // Ningen ja nai meaning thread
-    prisma.forumPost.create({
-      data: {
-        threadId: threads[2].id,
-        authorName: 'LyricsNerd',
-        content: 'I\'ve been thinking about this song a lot. The title "Not Human" seems to explore themes of alienation and societal expectations. The lyrics suggest a struggle with identity...',
-        likes: 31,
-      },
-    }),
-    // Live report posts
-    prisma.forumPost.create({
-      data: {
-        threadId: threads[4].id,
-        authorName: 'ConcertGoer',
-        content: 'Just got back from the show and WOW. The setlist was incredible - they opened with 夜行 and the energy was insane from the start. They played 3 new songs too!',
-        likes: 52,
-      },
-    }),
-  ])
-
-  console.log('Created forum posts')
+  // Forum threads and posts: no seed data — created by real users
 
   // ============================================
   // MEMBERS

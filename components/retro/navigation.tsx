@@ -5,12 +5,13 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Home, Disc, FileText, MessageSquare, Users, BookOpen, Menu, X } from "lucide-react"
 import { useState } from "react"
+import { useUser, UserButton, SignInButton } from "@clerk/nextjs"
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
   { href: "/discography", label: "Discography", icon: Disc, comingSoon: true },
   { href: "/lyrics", label: "Lyrics", icon: FileText },
-  { href: "/forum", label: "Forum", icon: MessageSquare, comingSoon: true },
+  { href: "/forum", label: "Forum", icon: MessageSquare },
   { href: "/members", label: "Members", icon: Users, comingSoon: true },
   { href: "/guestbook", label: "Guestbook", icon: BookOpen },
 ]
@@ -18,6 +19,7 @@ const navItems = [
 export function Navigation() {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { isSignedIn, user } = useUser()
 
   return (
     <>
@@ -87,6 +89,29 @@ export function Navigation() {
           </ul>
         </div>
 
+        {/* Auth Section */}
+        <div className="px-4 py-3 border-t border-border">
+          {isSignedIn ? (
+            <div className="flex items-center gap-3">
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: { avatarBox: "w-8 h-8" }
+                }}
+              />
+              <span className="font-[family-name:var(--font-pixel)] text-xs text-primary truncate">
+                {user.firstName ?? user.username ?? "user"}
+              </span>
+            </div>
+          ) : (
+            <SignInButton mode="redirect">
+              <button className="w-full px-3 py-2 bg-primary text-primary-foreground rounded text-xs font-[family-name:var(--font-pixel)] hover:bg-primary/90 transition-colors">
+                Sign In
+              </button>
+            </SignInButton>
+          )}
+        </div>
+
         {/* Decorative divider */}
         <div className="px-4 py-2">
           <div className="h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
@@ -114,13 +139,29 @@ export function Navigation() {
             <span className="font-[family-name:var(--font-pixel)] text-lg text-primary glow-pink">FUKURO</span>
             <span className="font-[family-name:var(--font-jp)] text-xs text-muted-foreground">梟の祠</span>
           </Link>
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 hover:bg-secondary rounded"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          <div className="flex items-center gap-2">
+            {isSignedIn ? (
+              <UserButton
+                afterSignOutUrl="/"
+                appearance={{
+                  elements: { avatarBox: "w-7 h-7" }
+                }}
+              />
+            ) : (
+              <SignInButton mode="redirect">
+                <button className="px-3 py-1.5 bg-primary text-primary-foreground rounded text-xs font-[family-name:var(--font-pixel)] hover:bg-primary/90 transition-colors">
+                  Sign In
+                </button>
+              </SignInButton>
+            )}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-2 hover:bg-secondary rounded"
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
